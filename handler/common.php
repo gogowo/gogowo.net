@@ -1,11 +1,11 @@
 <?php
 class Common{
-    function __construct(){
+    public function __construct(){
         $this->initDB();
         $this->clearTop(NOW);
         $this->clearFail(NOW);
     }
-    function initDB(){
+    private function initDB(){
         $mysql = getConfig('mysql');
         $this->db = new PDO($mysql['dsn'], $mysql['username'], $mysql['password']);
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
