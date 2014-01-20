@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="一个简单的任务发布平台">
+    <title>格格屋</title>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+<script src="/ckeditor/ckeditor.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+</head>
+<body>
+<div class="pure-g-r" id="layout">
+    <div class="sidebar pure-u">
+        <header class="header">
+            <hgroup>
+                <h1 class="brand-title">格格屋</h1>
+                <h2 class="brand-tagline">一个简单的任务发布平台</h2>
+            </hgroup>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/release.html">发布</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+    <div class="pure-u-1">
+        <div class="content">
+            <div class="main" style="line-height:1.6em;">
+                <h2 style="text-align:center;">关于格格屋</h2>
+                <p>&nbsp; &nbsp; 格格屋是一个简单的任务发布平台。当你发布后系统会给你填写的邮箱发一封邮件，查看邮件获取校验码，正确填写校验码，即可发布成功。</p>
+
+                <p>&nbsp; &nbsp; 首页是按照发布时间逆序显示的（首页只会显示80条信息），如果你想要出现在首页，点击邮件中附带的置顶地址，填写邮件中的校验码即可(一天能操作三次)。</p>
+
+                <p>&nbsp; &nbsp; 这里可用来发布寻求项目合伙人信息，兼职信息，打杂信息，跑腿信息，AND 所有需要人的信息。</p>
+
+                <p>&nbsp; &nbsp; 当然，你也可以主动发布寻求任务的信息。</p>
+
+                <p>&nbsp; &nbsp; 如果你厌倦了朝九晚五，一眼望到头的生活，这里欢迎你，这里的工作可能没有富足的薪水，但却可以丰富你的生活</p>
+            </div>
+            <footer class="footer">
+                <div class="pure-menu pure-menu-horizontal pure-menu-open">
+                    <ul>
+                        <li><a href="/about.html">关于格格屋</a></li>
+                        <li><a href="/"> 2013 gogowo.net, all rights reserved</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+<script src="http://yui.yahooapis.com/3.12.0/build/yui/yui-min.js"></script>
+<script>
+YUI().use('node-base', 'node-event-delegate', function (Y) {
+    // This just makes sure that the href="#" attached to the <a> elements
+    // don't scroll you back up the page.
+    Y.one('body').delegate('click', function (e) {
+        e.preventDefault();
+    }, 'a[href="#"]');
+});
+</script>
+<script type="text/javascript">
+  var desc = CKEDITOR.replace('desc');
+  $('#release').click(function() {
+    $('#release').attr('disabled',true);
+    var email = $('input[name="email"]').val();
+    var title = $('input[name="title"]').val();
+    var description = desc.getData();
+    $.post('/', {"email": email, "title": title, "description": description }, function(data){
+      if(data.status == 'error'){
+        $('#release').attr('disabled',false);
+    alert(data.message);
+      }else if(data.status == 'success'){
+        window.location.href = '/post/'+data.message;
+      }else{
+    alert(data);
+    $('#release').attr('disabled',false);
+    alert('内部错误');
+      }
+    });
+  });
+</script>
+</body>
+</html>
